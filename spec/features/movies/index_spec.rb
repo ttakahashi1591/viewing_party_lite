@@ -4,6 +4,20 @@ RSpec.describe 'Movie Results page, movies index', type: :feature do
   describe 'when a user visits the users dashboard' do
     before(:each) do
       @user = create(:user)
+
+      visit root_path
+
+      click_on 'Log In'
+
+      expect(current_path).to eq(login_path)
+      expect(page).to have_content('Email')
+      expect(page).to have_content('Password')
+
+      fill_in :email, with: @user.email
+      fill_in :password, with: @user.password
+      
+      click_on 'Log In'
+      
       visit user_discover_index_path(@user)
     end
 

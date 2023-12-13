@@ -5,12 +5,17 @@ class ViewingPartyController < ApplicationController
   end
 
   def create
-    if params[:duration].to_i >= params[:movie_duration].to_i
-      create_user_parties
-      redirect_to user_path(params[:user_id])
+    if session[:user_id]  
+      if params[:duration].to_i >= params[:movie_duration].to_i
+        create_user_parties
+        redirect_to user_path(params[:user_id])
+      else
+        flash[:alert] = "Not enough time"
+        redirect_to "/users/#{params[:user_id]}/movies/#{params[:movie_id]}/viewing_party/new"
+      end
     else
-      flash[:alert] = "Not enough time"
-      redirect_to "/users/#{params[:user_id]}/movies/#{params[:movie_id]}/viewing_party/new"
+      flash[:error] = 'You must be logged in or registered to create a movie party'
+      redirect_to user_movie_path(session[:user_id])
     end
   end
 
