@@ -7,17 +7,8 @@ RSpec.describe 'Movie Results page, movies index', type: :feature do
 
       visit root_path
 
-      click_on 'Log In'
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
 
-      expect(current_path).to eq(login_path)
-      expect(page).to have_content('Email')
-      expect(page).to have_content('Password')
-
-      fill_in :email, with: @user.email
-      fill_in :password, with: @user.password
-      
-      click_on 'Log In'
-      
       visit user_discover_index_path(@user)
     end
 

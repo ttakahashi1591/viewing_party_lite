@@ -1,5 +1,4 @@
-class UsersController < ApplicationController
-  
+class UsersController < ApplicationController 
   def new
   end
   
@@ -42,7 +41,8 @@ class UsersController < ApplicationController
   end
 
   def log_out
-    session[:user_id] = nil
+    session.clear
+    # session[:user_id] = nil
     flash[:success] = "You've been logged out!"
     redirect_to root_path
   end

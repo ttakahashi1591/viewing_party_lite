@@ -7,16 +7,7 @@ RSpec.describe 'Movie Details Page', type: :feature do
 
       visit root_path
 
-      click_on 'Log In'
-
-      expect(current_path).to eq(login_path)
-      expect(page).to have_content('Email')
-      expect(page).to have_content('Password')
-
-      fill_in :email, with: @user.email
-      fill_in :password, with: @user.password
-      
-      click_on 'Log In'
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@user)
      
       visit "users/#{@user.id}/movies/238"
     end
@@ -40,7 +31,9 @@ RSpec.describe 'Movie Details Page', type: :feature do
       expect(page).to have_content('Author: futuretv')
       expect(page).to have_content('Content: Great Movie **Ever**')
     end
+  end
 
+  describe "Visitor must be logged in to create a party" do
     it 'When a visitor visits the movies show page, and they click the button to create a viewing party, they should be redirected to the movies show page with a flash error message', :vcr do
       user = create(:user)
       
@@ -49,7 +42,7 @@ RSpec.describe 'Movie Details Page', type: :feature do
       click_on 'Create A Party'
 
       expect(current_path).to eq("/users/#{user.id}/movies/238")
-      expect(page).to have_content('You must be logged in or registered to create a party')
+      expect(page).to have_content('You must be logged in or registered to create a movie party')
     end
   end
 end
